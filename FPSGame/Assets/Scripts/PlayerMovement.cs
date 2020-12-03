@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
 
     public float speed = 12f; // players speed 
     public float gravity = -9.81f; // gravity 
+    public float jumpHeight = 3f;
     public float groundDistance = 0.4f;//distance from the ground 
 
     Vector3 velocity; // will track our velocity speed 
@@ -35,12 +36,17 @@ public class PlayerMovement : MonoBehaviour
         float z = Input.GetAxis("Vertical"); // gets inpit for vertical axis
 
         Vector3 move = transform.right * x + transform.forward * z; // takes the transform of the player and times it by the x input, and takes the forward and times it by the veritcal axis
-
         controller.Move(move * speed * Time.deltaTime); //takes our movement and increases it by speed variable when the frame is updated; 
 
-        velocity.y += gravity * Time.deltaTime; // will increase the y vector velocity by the gravity  
+       
 
+        velocity.y += gravity * Time.deltaTime; // will increase the y vector velocity by the gravity  
         controller.Move(velocity * Time.deltaTime);
+
+        if (Input.GetButtonDown("Jump") && isGrounded) // if the jump buttons is press and player is grounded, will take the jump height, -2(set floor number) and gravity and multiply them buy the square root to jump
+        {
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
     }
 
     void Grounded()
